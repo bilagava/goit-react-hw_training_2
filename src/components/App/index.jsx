@@ -2,17 +2,12 @@ import React, { Component } from 'react';
 import shortid from 'shortid';
 
 // import Form from '../Form';
-import ToduList from '../TodoList';
-import TodoEditor from '../TodoList/TodoEditor';
-import Filter from '../TodoList/Filter';
+import ToduList from 'components/TodoList';
+import TodoEditor from 'components/TodoList/TodoEditor';
+import Filter from 'components/TodoList/Filter';
 // import ColorPicker from 'components/ColorPicker';
 // import Dropdown from 'components/Dropdown';
 // import Counter from '../Counter';
-
-// import Section from 'components/Section';
-// import FeedbackOptions from 'components/FeedbackOptions';
-// import Statistics from 'components/Statistics';
-// import Notification from 'components/Notification';
 import styles from './style.module.css';
 
 // const colorPickerOptions = [
@@ -33,6 +28,7 @@ class App extends Component {
       { id: 'id-4', text: 'Todo-4', complited: true },
     ],
     inputValue: '',
+    filter: '',
   };
 
   addTodo = text => {
@@ -65,14 +61,30 @@ class App extends Component {
   changeFilter = evt => {
     this.setState({ filter: evt.currentTarget.value });
   };
-  render() {
-    const { todos, filter } = this.state;
 
-    const totalTodoCount = todos.length;
-    const complitedTodoCount = todos.reduce(
+  getVisibleTodos = () => {
+    const { filter, todos } = this.state;
+
+    const normalizedFilter = filter.toLowerCase();
+
+    return todos.filter(todo =>
+      todo.text.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  calcComplitedTodos = () => {
+    const { todos } = this.state;
+
+    return todos.reduce(
       (total, todo) => (todo.complited ? total + 1 : total),
       0
     );
+  };
+  render() {
+    const { todos, filter } = this.state;
+    const totalTodoCount = todos.length;
+    const complitedTodoCount = this.calcComplitedTodos;
+    const visibleTodos = this.getVisibleTodos();
 
     return (
       <div className={styles.container}>
@@ -81,7 +93,7 @@ class App extends Component {
         <TodoEditor onSubmit={this.addTodo} />
         <Filter value={filter} onChange={this.changeFilter} />
         <ToduList
-          todos={todos}
+          todos={visibleTodos}
           onDeleteTodo={this.deleteTodo}
           onToggleComplited={this.toggleComplited}
         />
