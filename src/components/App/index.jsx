@@ -113,10 +113,10 @@ class App extends Component {
   render() {
     // console.log('App render');
 
-    const { todos, filter, showModal } = this.state;
-    const totalTodoCount = todos.length;
-    const complitedTodoCount = this.calcComplitedTodos();
-    const visibleTodos = this.getVisibleTodos();
+    // const { todos, filter, showModal } = this.state;
+    // const totalTodoCount = todos.length;
+    // const complitedTodoCount = this.calcComplitedTodos();
+    // const visibleTodos = this.getVisibleTodos();
 
     return (
       <div className={styles.container}>
