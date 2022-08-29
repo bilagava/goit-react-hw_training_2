@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import shortid from 'shortid';
 
 // import Form from '../Form';
-import ToduList from 'components/TodoList';
-import TodoEditor from 'components/TodoList/TodoEditor';
-import Filter from 'components/TodoList/Filter';
+// import ToduList from 'components/TodoList';
+// import TodoEditor from 'components/TodoList/TodoEditor';
+// import Filter from 'components/TodoList/Filter';
+// import Modal from '../Modal/Modal';
+import Clock from '../Clock';
 // import ColorPicker from 'components/ColorPicker';
 // import Dropdown from 'components/Dropdown';
 // import Counter from '../Counter';
@@ -29,6 +31,27 @@ class App extends Component {
     ],
     inputValue: '',
     filter: '',
+    showModal: false,
+  };
+
+  componentDidMount = () => {
+    // console.log('App componentDidMount');
+    const todos = localStorage.getItem('todos');
+    const parsedTodos = JSON.parse(todos);
+
+    if (parsedTodos) {
+      this.setState({ todos: parsedTodos });
+    }
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    // console.log('App componentDidUpdate');
+
+    if (this.state.todos !== prevState.todos) {
+      console.log('Обновилось поле todos');
+
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
   };
 
   addTodo = text => {
@@ -80,29 +103,55 @@ class App extends Component {
       0
     );
   };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
   render() {
-    const { todos, filter } = this.state;
+    // console.log('App render');
+
+    const { todos, filter, showModal } = this.state;
     const totalTodoCount = todos.length;
-    const complitedTodoCount = this.calcComplitedTodos;
+    const complitedTodoCount = this.calcComplitedTodos();
     const visibleTodos = this.getVisibleTodos();
 
     return (
       <div className={styles.container}>
+        <Clock />
+        {/* <button type="button" onClick={this.toggleModal}>
+          Открыть модалку
+        </button>
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <h1>Привет єто контент модалки children</h1>
+            <p>
+              lorem3dfhstth aertnerrtabeertb e4tbe4tbq34 tbqe4tbe4tbqe
+              4tbae44ttbae44 tbae44t beq44ttbe44tbqe4t bee4tbe atbqe4tbq
+              4tbq4tbeq4tb
+            </p>
+            <button type="button" onClick={this.toggleModal}>
+              Закрыть
+            </button>
+          </Modal>
+        )} */}
         {/* <Form onSubmit={this.formSubmitHandler} />
         <ColorPicker options={colorPickerOptions} /> */}
-        <TodoEditor onSubmit={this.addTodo} />
+        {/* <TodoEditor onSubmit={this.addTodo} />
         <Filter value={filter} onChange={this.changeFilter} />
         <ToduList
           todos={visibleTodos}
           onDeleteTodo={this.deleteTodo}
           onToggleComplited={this.toggleComplited}
-        />
+        /> */}
         {/* <Counter />
         <Dropdown /> */}
-        <div>
+        {/* <div>
           <p>Общее кол-во Todo:{totalTodoCount}</p>
           <p>Кол-во выполненых Todo:{complitedTodoCount}</p>
-        </div>
+        </div> */}
       </div>
     );
   }
