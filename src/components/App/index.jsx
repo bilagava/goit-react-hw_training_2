@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import shortid from 'shortid';
 
 // import Form from '../Form';
-// import ToduList from 'components/TodoList';
-// import TodoEditor from 'components/TodoList/TodoEditor';
-// import Filter from 'components/TodoList/Filter';
-// import Modal from '../Modal/Modal';
-import Clock from '../Clock';
+import ToduList from 'components/TodoList';
+import TodoEditor from 'components/TodoList/TodoEditor';
+import Filter from 'components/TodoList/Filter';
+import Modal from '../Modal/Modal';
+import IconButton from '../IconButton/IconButton';
+// import { ReactComponent as AddIconMin } from '../Icon/minus.svg';
+import { ReactComponent as AddIconPl } from '../Icon/plus.svg';
+// import Clock from '../Clock';
 // import ColorPicker from 'components/ColorPicker';
 // import Dropdown from 'components/Dropdown';
 // import Counter from '../Counter';
@@ -47,10 +50,16 @@ class App extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     // console.log('App componentDidUpdate');
 
-    if (this.state.todos !== prevState.todos) {
+    const nextTodos = this.state.todos;
+    const prevTodos = prevState.todos;
+
+    if (nextTodos !== prevTodos) {
       console.log('Обновилось поле todos');
 
-      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+      localStorage.setItem('todos', JSON.stringify(nextTodos));
+    }
+    if (nextTodos.length > prevTodos.length && prevTodos.length !== 0) {
+      this.toggleModal();
     }
   };
 
@@ -61,6 +70,8 @@ class App extends Component {
       complited: false,
     };
     this.setState(({ todos }) => ({ todos: [todo, ...todos] }));
+
+    // this.toggleModal();
   };
 
   deleteTodo = todoId => {
@@ -111,22 +122,30 @@ class App extends Component {
   };
 
   render() {
-    // console.log('App render');
+    console.log('App render');
 
-    // const { todos, filter, showModal } = this.state;
-    // const totalTodoCount = todos.length;
-    // const complitedTodoCount = this.calcComplitedTodos();
-    // const visibleTodos = this.getVisibleTodos();
+    const { todos, filter, showModal } = this.state;
+    const totalTodoCount = todos.length;
+    const complitedTodoCount = this.calcComplitedTodos();
+    const visibleTodos = this.getVisibleTodos();
 
     return (
       <div className={styles.container}>
-        <Clock />
+        {/* <Clock /> */}
+
+        {/* <IconButton onClick={this.toggleModal}>
+          <AddIconMin width="20" height="20" fill="#fff" />
+        </IconButton> */}
+        <IconButton onClick={this.toggleModal}>
+          <AddIconPl width="20" height="20" fill="#fff" />
+        </IconButton>
         {/* <button type="button" onClick={this.toggleModal}>
           Открыть модалку
-        </button>
+        </button> */}
         {showModal && (
-          <Modal onClose={this.toggleModal}>
-            <h1>Привет єто контент модалки children</h1>
+          <Modal onClose={this.toggleModal} aria-label="Добавить todo">
+            <TodoEditor onSubmit={this.addTodo} />
+            {/* <h1>Привет єто контент модалки children</h1>
             <p>
               lorem3dfhstth aertnerrtabeertb e4tbe4tbq34 tbqe4tbe4tbqe
               4tbae44ttbae44 tbae44t beq44ttbe44tbqe4t bee4tbe atbqe4tbq
@@ -134,24 +153,24 @@ class App extends Component {
             </p>
             <button type="button" onClick={this.toggleModal}>
               Закрыть
-            </button>
+            </button> */}
           </Modal>
-        )} */}
-        {/* <Form onSubmit={this.formSubmitHandler} />
-        <ColorPicker options={colorPickerOptions} /> */}
-        {/* <TodoEditor onSubmit={this.addTodo} />
+        )}
+        {/* <TodoEditor onSubmit={this.addTodo} /> */}
         <Filter value={filter} onChange={this.changeFilter} />
         <ToduList
           todos={visibleTodos}
           onDeleteTodo={this.deleteTodo}
           onToggleComplited={this.toggleComplited}
-        /> */}
-        {/* <Counter />
-        <Dropdown /> */}
-        {/* <div>
+        />
+        <div>
           <p>Общее кол-во Todo:{totalTodoCount}</p>
           <p>Кол-во выполненых Todo:{complitedTodoCount}</p>
-        </div> */}
+        </div>
+        {/* <Form onSubmit={this.formSubmitHandler} />
+        <ColorPicker options={colorPickerOptions} /> */}
+        {/* <Counter />
+        <Dropdown /> */}
       </div>
     );
   }

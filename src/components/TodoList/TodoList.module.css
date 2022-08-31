@@ -12,14 +12,9 @@
 }
 
 .TodoListItem__complited {
-  color: tomato;
+  color: blue;
 }
 
-.TodoListText {
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-right: 10px;
-}
 .TodoEditor {
   display: flex;
   flex-direction: column;
@@ -54,4 +49,31 @@
   border-radius: 4px;
   margin-bottom: 12px;
   resize: none;
+}
+
+.checkbox {
+  display: inline-block;
+}
+
+.TodoListText {
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.Todo__button {
+  width: 70px;
+  height: 30px;
+  margin: 10px auto;
+  border: 2px solid blue;
+  background-color: blue;
+  color: white;
+  cursor: pointer;
+}
+
+.Todo__button:active {
+  background-color: white;
+  color: blue;
 }
